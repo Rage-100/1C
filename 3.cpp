@@ -1,44 +1,48 @@
-#include <bits/stdc++.h>
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
 using namespace std;
 
-void bubbleSort(vector<int>& arr) {
-    int n = arr.size();
-    for (int i = 0; i < n - 1; i++)
-        for (int j = 0; j < n - i - 1; j++)
-            if (arr[j] > arr[j + 1])
-                swap(arr[j], arr[j + 1]);
-}
-
-void insertionSort(vector<int>& arr) {
-    for (int i = 1; i < (int)arr.size(); i++) {
-        int key = arr[i], j = i - 1;
-        while (j >= 0 && arr[j] > key)
-            arr[j + 1] = arr[j--];
-        arr[j + 1] = key;
-    }
+// Helper to print arrays quickly
+void display(const vector<int>& arr) {
+    for (int x : arr) cout << x << " ";
+    cout << endl;
 }
 
 int main() {
-    // Bubble Sort
     int n;
-    cout << "Enter number of elements: ";
+
+    // --- Part 1: Bubble Sort ---
+    cout << "--- Bubble Sort ---\nEnter number of elements: ";
     cin >> n;
-    vector<int> arr(n);
+    vector<int> bubbleArr(n);
     cout << "Enter " << n << " elements:\n";
-    for (int& x : arr) cin >> x;
+    for (int &x : bubbleArr) cin >> x;
 
-    bubbleSort(arr);
-    cout << "\nSorted array in ascending order:\n";
-    for (int x : arr) cout << x << " ";
+    for (int i = 0; i < n - 1; i++)
+        for (int j = 0; j < n - i - 1; j++)
+            if (bubbleArr[j] > bubbleArr[j + 1]) swap(bubbleArr[j], bubbleArr[j + 1]);
 
-    // Insertion Sort
-    cout << "\n\nenter the values of array\n";
-    vector<int> arr2(5);
-    for (int& x : arr2) cin >> x;
+    cout << "Sorted array in ascending order:\n";
+    display(bubbleArr);
 
-    insertionSort(arr2);
-    cout << "sorted ouptout\n";
-    for (int x : arr2) cout << "   " << x;
+    // --- Part 2: Insertion Sort ---
+    cout << "\n--- Insertion Sort ---\nEnter 5 elements:\n";
+    vector<int> insertArr(5);
+    for (int &x : insertArr) cin >> x;
+
+    for (int i = 1; i < 5; i++) {
+        int key = insertArr[i], j = i - 1;
+        while (j >= 0 && insertArr[j] > key) {
+            insertArr[j + 1] = insertArr[j];
+            j--;
+        }
+        insertArr[j + 1] = key;
+    }
+
+    cout << "Sorted output:\n";
+    display(insertArr);
 
     return 0;
 }
