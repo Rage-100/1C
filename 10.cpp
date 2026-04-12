@@ -1,63 +1,64 @@
-#include <bits/stdc++.h> 
-using namespace std; 
-  
-const int INF = 1e9; 
-  
-// Distance matrix for 4 cities (example) 
-int dist[4][4] = { 
-    {0, 10, 15, 20}, 
-    {10, 0, 35, 25}, 
-    {15, 35, 0, 30}, 
-    {20, 25, 30, 0} 
-}; 
-int n = 4; 
-  
-// -------- Brute-force Optimal TSP -------- 
-int tspOptimal() { 
-    vector<int> cities; 
-    for (int i = 1; i < n; i++) cities.push_back(i); 
-    int bestCost = INF; 
-  
-    do { 
-        int cost = dist[0][cities[0]]; 
-        for (int i = 0; i < n - 2; i++) 
-            cost += dist[cities[i]][cities[i+1]]; 
-        cost += dist[cities[n-2]][0]; // return to start 
-        bestCost = min(bestCost, cost); 
-    } while (next_permutation(cities.begin(), cities.end())); 
-  
-    return bestCost; 
-} 
-  
-// -------- Nearest Neighbor Approximation -------- 
-int tspApprox() { 
-    vector<bool> visited(n, false); 
-    int cost = 0, curr = 0; 
-    visited[curr] = true; 
-  
-    for (int step = 1; step < n; step++) { 
-        int nextCity = -1, minDist = INF; 
-        for (int j = 0; j < n; j++) { 
-            if (!visited[j] && dist[curr][j] < minDist) { 
-                minDist = dist[curr][j]; 
-                nextCity = j; 
-            } 
-        } 
-        cost += minDist; 
-        curr = nextCity; 
-        visited[curr] = true; 
-    } 
-    cost += dist[curr][0]; // return to start 
-    return cost; 
-} 
-  
-int main() { 
-    int optimal = tspOptimal(); 
-    int approx = tspApprox(); 
-    double error = 100.0 * (approx - optimal) / optimal; 
-  
-    cout << "Optimal TSP cost: " << optimal << "\n"; 
-    cout << "Approximation cost: " << approx << "\n"; 
-    cout << "Approximation error: " << error << "%\n"; 
-    return 0; 
-} 
+#include <iostream>
+using namespace std;
+
+#define N 4
+#define INF 9999
+
+int cost[N][N] = {
+    {0,10,15,20},
+    {10,0,35,25},
+    {15,35,0,30},
+    {20,25,30,0}
+};
+
+int dp[1<<N][N], visitedAll = (1<<N)-1;
+
+// Exact TSP (DP + Bitmask)
+int tsp(int mask, int pos){
+    if(mask == visitedAll) return cost[pos][0];
+    if(dp[mask][pos] != -1) return dp[mask][pos];
+
+    int ans = INF;
+    for(int i=0;i<N;i++)
+        if(!(mask & (1<<i)))
+            ans = min(ans, cost[pos][i] + tsp(mask|1<<i, i));
+
+    return dp[mask][pos] = ans;
+}
+
+// Nearest Neighbor Approximation
+int approx(){
+    bool vis[N]={0};
+    int cur=0, total=0; vis[0]=1;
+
+    cout << "\nNearest Neighbor Path: 0";
+    for(int i=1;i<N;i++){
+        int near=-1, mn=INF;
+        for(int j=0;j<N;j++)
+            if(!vis[j] && cost[cur][j]<mn && cost[cur][j])
+                mn=cost[cur][j], near=j;
+
+        vis[near]=1; total+=mn; cur=near;
+        cout << " -> " << cur;
+    }
+    cout << " -> 0\n";
+    return total + cost[cur][0];
+}
+
+int main(){
+    for(int i=0;i<(1<<N);i++)
+        for(int j=0;j<N;j++)
+            dp[i][j] = -1;
+
+    cout<<"Traveling Salesperson Problem (TSP) Comparison\n";
+    cout<<"----------------------------------------------\n";
+
+    int exact = tsp(1,0);
+    int appr = approx();
+
+    double err = (double)(appr - exact) / exact * 100;
+
+    cout<<"\nOptimal (Exact) TSP Cost = "<<exact;
+    cout<<"\nApproximate (Nearest Neighbor) TSP Cost = "<<appr;
+    cout<<"\nApproximation Error = "<<err<<"%\n";
+}
