@@ -2,6 +2,7 @@
 #include <vector>
 #include <algorithm>
 #include <ctime>
+#include <iomanip>
 using namespace std;
 
 #define INF 9999
@@ -75,7 +76,8 @@ int main(){
     t=clock(); kruskal(c,n);
     double t2=(double)(clock()-t)/CLOCKS_PER_SEC;
 
-    cout<<"\nExecution Time Comparison:";
-    cout<<"\nPrim's Algorithm Time: "<<t1;
-    cout<<"\nKruskal's Algorithm Time: "<<t2<<"\n";
+cout << fixed << setprecision(10);
+cout << "\nExecution Time Comparison:";
+cout << "\nPrim's Algorithm Time: " << t1;
+cout << "\nKruskal's Algorithm Time: " << t2 << "\n";
 }
