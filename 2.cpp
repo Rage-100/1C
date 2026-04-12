@@ -1,36 +1,39 @@
 #include <iostream>
+#include <vector>
 #include <ctime>
-#include <iomanip>
+
 using namespace std;
 
-int binarySearch(int arr[], int low, int high, int key) {
+int binarySearch(const vector<int>& arr, int low, int high, int key) {
     if (low > high) return -1;
     int mid = low + (high - low) / 2;
     if (arr[mid] == key) return mid;
-    return arr[mid] > key ? binarySearch(arr, low, mid-1, key) : binarySearch(arr, mid+1, high, key);
+    return (arr[mid] > key) ? binarySearch(arr, low, mid - 1, key) : binarySearch(arr, mid + 1, high, key);
 }
 
 int main() {
-    int arr[100000], n, key;
-    cout << "Enter number of elements: "; cin >> n;
+    int n, key;
+    cout << "Enter number of elements:\n";
+    cin >> n;
 
+    vector<int> arr(n);
     cout << "Enter " << n << " elements in sorted order:\n";
-    for (int i = 0; i < n; i++) cin >> arr[i];
+    for (int &i : arr) cin >> i;
 
-    cout << "Enter the element to search: "; cin >> key;
+    cout << "Enter the element to search: ";
+    cin >> key;
 
-    clock_t s = clock();
-    int result = binarySearch(arr, 0, n-1, key);
-    double t = (double)(clock()-s)/CLOCKS_PER_SEC;
+    clock_t start = clock();
+    int result = binarySearch(arr, 0, n - 1, key);
+    clock_t end = clock();
 
     if (result != -1)
-        cout << "\nElement " << key << " found at position " << result+1 << ".\n";
+        cout << "\nElement " << key << " found at position " << result + 1 << ".\n";
     else
         cout << "\nElement " << key << " not found in the array.\n";
 
-    cout << "\nTime taken by recursive binary search: " << fixed << setprecision(10) << t << " seconds"
-         << "\nTheoretical Time Complexity: O(log n)"
-         << "\nSpace Complexity (due to recursion stack): O(log n)\n";
+    printf("\nTime taken by recursive binary search: %.10f seconds", (double)(end - start) / CLOCKS_PER_SEC);
+    cout << "\nTheoretical Time Complexity: O(log n)\nSpace Complexity (due to recursion stack): O(log n)\n";
 
     return 0;
 }
