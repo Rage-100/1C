@@ -4,7 +4,7 @@
 
 using namespace std;
 
-// Helper to print arrays quickly
+
 void display(const vector<int>& arr) {
     for (int x : arr) cout << x << " ";
     cout << endl;
@@ -13,7 +13,7 @@ void display(const vector<int>& arr) {
 int main() {
     int n;
 
-    // --- Part 1: Bubble Sort ---
+  
     cout << "--- Bubble Sort ---\nEnter number of elements: ";
     cin >> n;
     vector<int> bubbleArr(n);
@@ -27,7 +27,7 @@ int main() {
     cout << "Sorted array in ascending order:\n";
     display(bubbleArr);
 
-    // --- Part 2: Insertion Sort ---
+
     cout << "\n--- Insertion Sort ---\nEnter 5 elements:\n";
     vector<int> insertArr(5);
     for (int &x : insertArr) cin >> x;
